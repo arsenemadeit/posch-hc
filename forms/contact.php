@@ -7,7 +7,7 @@
   */
 
   // Replace contact@example.com with your real receiving email address
-   $receiving_email_address = 'arsenembanou26@gmail.com';
+  /* $receiving_email_address = 'arsenembanou26@gmail.com';
 
   if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
     include( $php_email_form );
@@ -33,7 +33,7 @@
   );
   */
 
-  $contact->add_message( $_POST['name'], 'From');
+/*  $contact->add_message( $_POST['name'], 'From');
   $contact->add_message( $_POST['email'], 'Email');
   $contact->add_message( $_POST['message'], 'Message', 10);
 
@@ -59,5 +59,36 @@ $contact->ajax_error' = 'Sorry, the request should be an Ajax POST'; // If ajax 
 
    $retour = mail('arsenembanou26@gmail.com', 'Envoi depuis la page Contact', $_POST['message'], '');
     if ($retour)
-        echo '<p>Votre message a bien été envoyé.</p>';
+        echo '<p>Votre message a bien été envoyé.</p>'; */
+if(isset($_POST)){
+	$formok = true;
+
+	//form data
+
+	$name = htmlspecialchars($_POST['name']);
+	$email = htmlspecialchars($_POST['email']);
+	$message = htmlspecialchars($_POST['message']);
+
+	//validation
+	if(empty($name) || empty($email) || empty($message)){
+		$formok = false;
+	}
+
+	if($formok){
+		$headers = "From: info@nandccontractors.com" . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$emailbody = "<p>You have recieved a new message from the enquiries form on your website.</p>
+                  <p><strong>Name: </strong> {$name} </p>
+                  <p><strong>Email Address: </strong> {$email} </p>
+                  <p><strong>Message: </strong> {$message} </p> ";
+
+    mail("arsenembanou26@gmail.com","Message",$emailbody,$headers);
+
+	}
+
+        //redirect back to form
+        header('location: ' . $_SERVER['HTTP_REFERER']);
+
+}
+
 ?>
